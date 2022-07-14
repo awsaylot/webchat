@@ -1,14 +1,17 @@
 import {Client} from '@stomp/stompjs'
-
+import store from '../store'
+import { receiveMessage } from "../actions/chatActions/chat";
 
 
 class WebsocketService {
 	SOCKET_URL = "ws://localhost:8080/ws-message"
 	socketClient = null
+	state = store.getState()
 	connect = () => {
+		const username = this.state.auth.user.username
 		let onConnected = () => {
 			console.log("Connected to chat")
-			client.subscribe('/chat/room', (msg) => console.log(JSON.parse(msg.body)))
+			client.subscribe('/chat/room', (msg) => this.receiveMessage(msg))
 		}
 
 		let onDisconnected = () => {
@@ -34,11 +37,12 @@ class WebsocketService {
 		this.socketClient = null
 	}
 
-	sendMessage = (type, payload) => {
+	sendMessage = (payload) => {
+		const username = this.state.auth.user.username
 		var messageToSend = JSON.stringify({
-			'type': type,
-			'message': payload,
-			'sender': 'michael'
+			'type': "CHAT",
+			'message':payload,
+			'sender': username
 		})
 		if (!this.socketClient) {
 			alert('You must connect first!')
@@ -48,6 +52,11 @@ class WebsocketService {
 				body: messageToSend
 			})
 		}
+	}
+
+	receiveMessage = (payload) => {
+		const message = JSON.parse(payload.body)
+		store.dispatch(receiveMessage(message))
 	}
 }
 

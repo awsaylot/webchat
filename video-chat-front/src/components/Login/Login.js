@@ -4,6 +4,7 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { connect } from "react-redux";
 import { login } from "../../actions/authActions/auth";
+import { Navigate } from "react-router-dom";
 const required = (value) => {
   if (!value) {
     return (
@@ -42,7 +43,6 @@ class Login extends Component {
     if (this.checkBtn.context._errors.length === 0) {
       dispatch(login(this.state.username, this.state.password))
         .then(() => {
-          history.push("/profile")
           window.location.reload()
         })
         .catch(() => {
@@ -59,7 +59,7 @@ class Login extends Component {
   render() {
     const {isLoggedIn, message} = this.props
     if (isLoggedIn) {
-      return <h1>You are logged in</h1>
+      return <Navigate to="/home" replace={true} />
     }
     return (
       <div className="col-md-12">

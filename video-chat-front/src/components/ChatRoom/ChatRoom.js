@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import WebsocketService from '../../services/websocket.service'
+import InputBox from './InputBox'
+import Messages from './Messages'
+import "./ChatRoom.css"
 
 export default class ChatRoom extends Component {
 	constructor(props) {
@@ -12,25 +15,28 @@ export default class ChatRoom extends Component {
 		this.handleDisconnect = this.handleDisconnect.bind(this)
 	}
 
+	componentDidMount() {
+		this.handleConnect()
+	}
+	componentWillUnmount() {
+		this.handleDisconnect()
+	}
+
 	handleConnect = (e) => {
-		e.preventDefault()
 		WebsocketService.connect()
 		this.setState({connected: true})
 	}
 
 	handleDisconnect = (e) => {
-		e.preventDefault()
 		WebsocketService.disconnect()
 		this.setState({connected: false})
 	}
 	
   render() {
 	return (
-	  <div>
-		<button onClick={this.handleConnect}>Connect</button>
-		<button onClick={this.handleDisconnect}>Disconnect</button>
-		<button onClick={() => WebsocketService.sendMessage('CHAT', 'test')}>Send test Message</button>
-		<p>{this.connected}</p>
+	  <div className='chatroom'>
+		<Messages />
+		<InputBox />
 	  </div>
 	)
   }

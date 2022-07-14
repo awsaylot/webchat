@@ -27,7 +27,7 @@ class App extends Component {
   render() {
     const { currentUser, showAdminBoard } = this.state;
     return (
-        <div>
+        <div className="app">
           <Header currentUser={currentUser} showAdminBoard={showAdminBoard} />
           <div className="container mt-3">
           <Outlet />
