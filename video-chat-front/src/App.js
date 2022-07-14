@@ -1,42 +1,45 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import { Outlet } from "react-router-dom";
 
-import Header from './components/Header';
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Home from "./components/Home";
-import Profile from "./components/Profile";
-import BoardUser from "./components/BoardUser";
-import BoardModerator from "./components/BoardModerator";
-import BoardAdmin from "./components/BoardAdmin";
-import ChatRoom from "./components/ChatRoom";
+import Header from "./components/Header/Header";
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showAdminBoard: false,
+      currentUser: undefined,
+    };
 
-const App = () => {
-  return (
-	<Router>
-	  <div>
-		<Header />
-		<div >
-		  <Switch>
-			<Route exact path={["/", "/home"]} component={Home} />
-			<Route exact path="/login" component={Login} />
-			<Route exact path="/register" component={Register} />
-			<Route exact path="/profile" component={Profile} />
-			<Route path="/user" component={BoardUser} />
-			<Route path="/mod" component={BoardModerator} />
-			<Route path="/admin" component={BoardAdmin} />
-			<Route path="/chat" component={ChatRoom} />
-		  </Switch>
-		</div>
-	  </div>
-	</Router>
-  );
-};
-
-export default App;
-
-// TODO: build out chat page with chat messages and userlist
-// TODO: build out video chat
-// TODO: add styles
+  }
+  componentDidMount() {
+    const user = this.props.user;
+    if (user) {
+      this.setState({
+        currentUser: user,
+        showAdminBoard: user.roles.includes("ROLE_ADMIN"),
+      });
+    }
+  }
+  
+  render() {
+    const { currentUser, showAdminBoard } = this.state;
+    return (
+        <div>
+          <Header currentUser={currentUser} showAdminBoard={showAdminBoard} />
+          <div className="container mt-3">
+          <Outlet />
+          </div>
+        </div>
+    );
+  }
+}
+function mapStateToProps(state) {
+  const { user } = state.auth;
+  return {
+    user,
+  };
+}
+export default connect(mapStateToProps)(App);
