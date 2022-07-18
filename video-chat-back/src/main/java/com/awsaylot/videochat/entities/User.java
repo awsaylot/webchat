@@ -32,11 +32,35 @@ public class User {
   @Size(max = 120)
   private String password;
 
+  @Column(name = "verification_code", length = 64)
+  @Size(max = 64)
+  private String verificationCode;
+
+  private boolean enabled;
+
+  public String getVerificationCode() {
+    return verificationCode;
+  }
+
+  public void setVerificationCode(String verificationCode) {
+    this.verificationCode = verificationCode;
+  }
+
+  public boolean isEnabled() {
+    System.out.println(this.enabled);
+    return this.enabled;
+  }
+
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
+  }
+
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(  name = "user_roles", 
         joinColumns = @JoinColumn(name = "user_id"), 
         inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
+
 
   public User() {
   }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import "./Messages.css"
 
@@ -14,8 +14,12 @@ export default function Messages() {
     </div>
   </div>
 )
- 
+
+
+
   return (
-	<div className="message-box">{messageBox}</div>
+	<div className="message-box">
+    {messageBox}
+  </div>
   )
 }

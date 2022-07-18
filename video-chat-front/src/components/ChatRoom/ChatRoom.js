@@ -35,6 +35,7 @@ export default class ChatRoom extends Component {
   render() {
 	return (
 	  <div className='chatroom'>
+		<h3>Chatroom!</h3>
 		<Messages />
 		<InputBox />
 	  </div>
